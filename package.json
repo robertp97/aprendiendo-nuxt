@@ -1,0 +1,14 @@
+{
+  "name": "noobs",
+  "version": "1.0.0",
+  "description": "pagina web",
+  "main": "index.js",
+  "scripts": {
+    "dev":"nuxt"
+  },
+  "author": "robert",
+  "license": "ISC",
+  "dependencies": {
+    "nuxt": "^2.4.5"
+  }
+}
