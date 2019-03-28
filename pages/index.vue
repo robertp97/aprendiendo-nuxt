@@ -1,8 +1,11 @@
 <template>
-<div>
+<div >
+<!-- <navbar/>-->
+  
 <h1>hola {{msg}}</h1>
-<input type="text" v-model="msg">
-<button @click="guardar">guardar</button>
+<input type="text" v-model="msg" >
+<button @click="guardar" class="btn btn-success">guardar</button>
+<b-button variant="outline-success">guardar</b-button>
 <table>
     <tr>
         <th>nombre</th>
@@ -15,7 +18,10 @@
     
 </template>
 <script>
+//import navbar  from '../components/navbar'
+//import contacto from './contacto'
 export default {
+   // components:{navbar},
     data(){
         return{
             msg:"robert ",
