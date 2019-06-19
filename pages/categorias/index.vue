@@ -1,12 +1,21 @@
 <template >
-  <b-form style="background-color: #d1d1d1">
-    <div class="col-sm-6">
-      <h1>CATEGORIAS</h1>
+  <b-form>
+    <div class="row mt-3">
+      <div class="col-sm-6">
+        <h1>
+          <b-badge>Categorias</b-badge>
+        </h1>
+      </div>
+      <div class="col-sm-6">
+        <b-button
+          v-b-popover.hover="'puedes crear una nueva categoria!'"
+          variant="success"
+          href="/categorias/nuevo"
+          class="rounded-pill"
+        >Nuevo</b-button>
+      </div>
     </div>
-    <div class="col-sm-6">
-      <b-button v-b-popover.hover="'puedes crear una nueva categoria!'" variant="success" href="/categorias/nuevo">Nuevo</b-button>
-     
-    </div>
+
     <b-table
       id="table"
       responsive
@@ -19,8 +28,8 @@
       small
     >
       <template slot="acciones" slot-scope="data">
-        <b-button variant="success">Editar</b-button>
-        <b-button  @click="eliminar(data.item.id)"  variant="danger" type="button">Eliminar</b-button>
+        <b-button class="rounded-pill" variant="success" @click="editar(data.item)" v-b-modal.modal-edit>Editar</b-button>
+        <b-button class="rounded-pill" v-b-modal.modal-sm variant="danger" @click="eliminar(data.item.id)" type="button">Eliminar</b-button>
       </template>
     </b-table>
     <b-pagination
@@ -30,19 +39,38 @@
       aria-controls="table"
       align="center"
     ></b-pagination>
-    <footer class="text-center py-2" style="background-color: rgb(102, 100, 97)">
-      <p
-        style="color: blanchedalmond"
-      >LAS MEJORES COMIDAS RAPIDAS DE MOCOA - CLL8-32 CRA12 B/ VILLA ROSA</p>
-      <p style="color: blanchedalmond">DOMICILIOS: 32035535852</p>
-      <div class="footer-copyright text-center py-2" style="background-color: rgb(70, 68, 67)">
-        © 2019 Copyright:
-        <a
-          href="file:///C:/Users/Robert/Documents/pagina/index.html"
-          style="color: blanchedalmond"
-        >www.comidasrapidas.com</a>
-      </div>
-    </footer>
+    <b-modal
+      header-bg-variant="secondary"
+      id="modal-sm"
+       header-text-variant = "light"
+      title="Confirmación"
+      hide-footer
+      ref="confirmar"
+    >
+      ¿Esta seguro que desea eliminar el registro!?
+     <div class="d-flex justify-content-center">
+       <b-button class="rounded-pill" type="submit" id="most" @click="esconder1" >Cancelar</b-button>
+        <b-button class="rounded-pill" href="/categorias" id="borrar" @click="esconder1" variant="danger">Eliminar</b-button>
+ 
+     </div>
+        </b-modal>
+    <b-modal
+      header-bg-variant="dark"
+      header-text-variant="light"
+      body-bg-variant="secondary"
+      body-text-variant="light"
+      ref="edit"
+      id="modal-edit"
+      title="Editar"
+      no-close-on-backdrop
+      hide-footer
+    >
+      <label for>Nombre</label>
+      <b-input id="nombreedit" required type="text" placeholder="nombre"></b-input>
+      <label for>Descripcion</label>
+      <b-input id="desedit" required type="text" placeholder="descripcion"></b-input>
+      <b-button type="submit" id="editr" class="btn btn-success rounded-pill">Editar</b-button>
+    </b-modal>
   </b-form>
 </template>
 <script>
@@ -74,12 +102,13 @@ export default {
   },
   computed: {
     rows() {
-      return this.productos.length
+      return this.productos.length;
     }
   },
   methods: {
     eliminar(id) {
       
+      document.getElementById("borrar").onclick = function() {
       db.collection("categorias")
         .doc(id)
         .delete()
@@ -89,8 +118,35 @@ export default {
             if (value.id == id) index = key;
           });
           this.productos.splice(index, 1);
+          alert("Rgistro eliminado")
         });
     }
+    },
+    editar(id) {
+      document.getElementById("nombreedit").value = id.nombre;
+      document.getElementById("desedit").value = id.descripcion;
+      document.getElementById("editr").onclick = function() {
+        var washingtonRef = db.collection("categorias").doc(id.id);
+        var nom = document.getElementById("nombreedit").value;
+        var des = document.getElementById("desedit").value;
+        return washingtonRef
+          .update({
+            nombre: nom,
+            descripcion: des
+          })
+          .then(function() {
+            alert("Actualizacion exitosa!");
+          })
+          .catch(function(error) {
+            alert("ha ocurrido un error: ", error);
+          });
+      };
+    },
+    esconder1(){
+      this.$refs["confirmar"].hide();
+     
+    }
+
   }
 };
 </script>

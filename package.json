@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "dev": "nuxt",
-    "generate":"nuxt generate"
+    "generate": "nuxt generate"
   },
   "author": "robert",
   "license": "ISC",
   "dependencies": {
     "bootstrap-vue": "^2.0.0-rc.15",
     "firebase": "^5.9.2",
-    "nuxt": "^2.4.5"
+    "nuxt": "^2.4.5",
+    "vue-bootstrap-toasts": "^1.0.5"
   },
   "devDependencies": {
     "core-js": "^2.6.5"

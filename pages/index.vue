@@ -1,5 +1,5 @@
 <template >
-  <div class="container-fluid" >
+  <div class="container-fluid">
     <b-form name="galeria">
       <b-carousel
         id="carousel-1"
@@ -24,42 +24,69 @@
           text="cangreburger y papas a la francesa"
           img-src="https://i1.wp.com/www.dalemedia.us/wp-content/uploads/2017/01/portada-10-hamburguesas-caras.jpg?fit=1280%2C720&ssl=1"
         ></b-carousel-slide>
-        <b-spinner type="grow" label="Spinning"></b-spinner>
+       
 
         <b-carousel-slide
-        
           img-src="http://lanotaeconomica.com.co/wp-content/uploads/2018/09/Comida-r%C3%A1pida.jpg"
         >
           <h1>Cangreburguer!</h1>
         </b-carousel-slide>
 
         <b-carousel-slide
-        caption="SuperCombo"
-        
+          caption="SuperCombo"
           text="cangreburger, papas a la francesa,pollo y gaseosa"
           img-src="https://media-cdn.tripadvisor.com/media/photo-s/14/b0/e4/c8/comidas-rapidas-en-los.jpg"
         ></b-carousel-slide>
 
         <b-carousel-slide
-        caption="Pizza hawaina"
-         
+          caption="Pizza hawaina"
           img-src="https://www.superpizza.es/wp-content/uploads/2018/09/pizza-hawaiana-origen.png"
         ></b-carousel-slide>
       </b-carousel>
     </b-form>
     
-      <footer class="text-center py-2 " style="background-color: rgb(102, 100, 97)">
-        <p style="color: blanchedalmond">LAS MEJORES COMIDAS RAPIDAS DE MOCOA - CLL8-32 CRA12 B/ VILLA ROSA </p>
-        <p style="color: blanchedalmond">DOMICILIOS: 32035535852 </p>
-        <div class="footer-copyright text-center py-2" style="background-color: rgb(70, 68, 67)">© 2019 Copyright:
-            <a href="file:///C:/Users/Robert/Documents/pagina/index.html" style="color: blanchedalmond"> www.comidasrapidas.com</a>
-        </div>
-    </footer>
+    
+    <div class="row mt-4">
+      <div class="col-sm-3" v-for="producto in productos" :key="producto.id">
+        
+        <cardproductos :nombre="producto.nombre" 
+        :slug="producto.slug"
+        :imagen="producto.imagen" 
+        :precio="producto.precio"
+        :cantidad="producto.cantidad"/>
+      </div>
+    </div>
+<div>
+  
+</div>
     
   </div>
 </template>
 <script>
+import { db } from "../services/firebase";
+import cardproductos from '../components/cardproducto'
+import fot from '../components/footer'
 export default {
+  components:{cardproductos},
+  
+  asyncData() {
+    return db
+      .collection("productos")
+      .get()
+      .then(productosSnap => {
+        let productos = [];
+        productosSnap.forEach(value => {
+          productos.push({
+            id: value.id,
+            ...value.data()
+          });
+        });
+        return {
+          productos
+        };
+      });
+   
+  },
   data() {
     return {
       slide: 0,
@@ -76,6 +103,3 @@ export default {
   }
 };
 </script>
-<style>
-
-</style>
